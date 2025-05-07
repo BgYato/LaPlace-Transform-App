@@ -1,6 +1,6 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import sympy as sp
+from flask import Flask, request, jsonify # type: ignore
+from flask_cors import CORS # type: ignore
+import sympy as sp # type: ignore
 
 app = Flask(__name__)
 CORS(app)  # para permitir requests desde React
