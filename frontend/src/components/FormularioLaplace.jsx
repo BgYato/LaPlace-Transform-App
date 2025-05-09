@@ -9,7 +9,7 @@ const funciones = [
   { id: "cos(a*t)", label: "cos(a·t)", parametros: ["a"] },
 ];
 
-const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado }) => {
+const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado, setHistorial }) => {
   const [funcion, setFuncion] = useState(funciones[0].id);
   const [parametros, setParametros] = useState({ a: "0", n: "1" });
 
@@ -41,30 +41,46 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado 
         return;
       }
     }
-
+  
     const vista = generarFormula(parametros);
     setFormulaVista(vista);
-
+  
     try {
       const res = await fetch("http://localhost:5000/laplace", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ funcion, parametros }),
       });
-
+  
       const data = await res.json();
       const final = generarFormula(parametros);
       setFormulaResultado(final);
       setResultado(data.resultado);
+  
+      // 🧠 Guardar en historial
+      const nuevoItem = {
+        formula: final,
+        resultado: data.resultado,
+        fecha: new Date().toISOString(),
+      };
+  
+      setHistorial((prev) => {
+        const actualizados = [nuevoItem, ...prev];
+        localStorage.setItem("laplaceHistorial", JSON.stringify(actualizados));
+        return actualizados;
+      });
+  
     } catch (err) {
-      console.error(err);
+      console.error("❌ Error al calcular la transformada:", err);
+      alert("Ocurrió un error al procesar la transformada.");
     }
   };
+  
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 dark:bg-gray-900 dark:text-white">
       <select
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full bg-gray-900"
         value={funcion}
         onChange={(e) => {
           setFuncion(e.target.value);
@@ -80,7 +96,7 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado 
 
       <div className="space-y-2">
         {obtenerParametros().map((param) => (
-          <div key={param} className="flex items-center gap-2">
+          <div key={param} className="flex items-center gap-2 dark:bg-gray-900 dark:text-white">
             <button
                 onClick={() =>
                     setParametros((prev) => {
@@ -92,14 +108,14 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado 
                     };
                     })
                 }
-                className="px-2 py-1 bg-gray-200 rounded"
+                className="px-2 py-1 bg-gray-200 rounded dark:bg-gray-900 dark:text-white"
             >-</button>
             <input
               type="number"
               name={param}
               value={parametros[param]}
               disabled
-              className="w-16 text-center border rounded p-1"
+              className="w-16 text-center border rounded p-1 dark:bg-gray-900 dark:text-white"
             />
             <button
                 onClick={() =>
@@ -112,15 +128,15 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado 
                     };
                     })
                 }
-                className="px-2 py-1 bg-gray-200 rounded"
+                className="px-2 py-1 bg-gray-200 rounded dark:bg-gray-900 dark:text-white"
             >+</button>
           </div>
         ))}
       </div>
 
       {/* Vista previa */}
-      <div className="p-4 bg-gray-100 rounded">
-        <h3 className="text-lg font-semibold mb-2">Vista previa:</h3>
+      <div className="p-4 bg-gray-100 rounded dark:bg-gray-800 dark:text-white">
+        <h3 className="text-lg font-semibold mb-2 dark:bg-gray-800 dark:text-white">Vista previa:</h3>
         <MathJax>{`\\[${generarFormula(parametros)}\\]`}</MathJax>
       </div>
 
