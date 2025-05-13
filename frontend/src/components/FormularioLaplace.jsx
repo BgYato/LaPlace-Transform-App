@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MathJax } from "better-react-mathjax";
+import { useTheme } from "../context/ThemeContext";
 
 const funciones = [
   { id: "t**n", label: "tⁿ", parametros: ["n"] },
@@ -12,6 +13,7 @@ const funciones = [
 const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado, setHistorial }) => {
   const [funcion, setFuncion] = useState(funciones[0].id);
   const [parametros, setParametros] = useState({ a: "0", n: "1" });
+  const { darkMode } = useTheme();
 
   const generarFormula = (paramSource) => {
     let expr = funcion;
@@ -56,8 +58,7 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado,
       const final = generarFormula(parametros);
       setFormulaResultado(final);
       setResultado(data.resultado);
-  
-      // 🧠 Guardar en historial
+      
       const nuevoItem = {
         formula: final,
         resultado: data.resultado,
@@ -78,9 +79,9 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado,
   
 
   return (
-    <div className="space-y-4 dark:bg-gray-900 dark:text-white">
+    <div className={`space-y-4`}>
       <select
-        className="border p-2 rounded w-full bg-gray-900"
+        className={`border p-2 rounded w-full ${ darkMode ? "bg-gray-900 text-white" :  ""}`}
         value={funcion}
         onChange={(e) => {
           setFuncion(e.target.value);
@@ -96,7 +97,7 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado,
 
       <div className="space-y-2">
         {obtenerParametros().map((param) => (
-          <div key={param} className="flex items-center gap-2 dark:bg-gray-900 dark:text-white">
+          <div key={param} className={`flex items-center gap-2`}>
             <button
                 onClick={() =>
                     setParametros((prev) => {
@@ -108,14 +109,14 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado,
                     };
                     })
                 }
-                className="px-2 py-1 bg-gray-200 rounded dark:bg-gray-900 dark:text-white"
+                className={`px-2 py-1 bg-gray-200 rounded ${ darkMode ? "bg-gray-800 text-white" :  ""}`}
             >-</button>
             <input
               type="number"
               name={param}
               value={parametros[param]}
               disabled
-              className="w-16 text-center border rounded p-1 dark:bg-gray-900 dark:text-white"
+              className={`w-16 text-center border rounded p-1 ${ darkMode ? "bg-gray-800 text-white" :  ""}`}
             />
             <button
                 onClick={() =>
@@ -128,21 +129,21 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado,
                     };
                     })
                 }
-                className="px-2 py-1 bg-gray-200 rounded dark:bg-gray-900 dark:text-white"
+                className={`px-2 py-1 bg-gray-200 rounded ${ darkMode ? "bg-gray-800 text-white" :  ""}`}
             >+</button>
           </div>
         ))}
       </div>
 
       {/* Vista previa */}
-      <div className="p-4 bg-gray-100 rounded dark:bg-gray-800 dark:text-white">
+      <div className={`p-4 bg-gray-100 rounded ${ darkMode ? "bg-gray-800 text-white" :  ""}`}>
         <h3 className="text-lg font-semibold mb-2 dark:bg-gray-800 dark:text-white">Vista previa:</h3>
         <MathJax>{`\\[${generarFormula(parametros)}\\]`}</MathJax>
       </div>
 
       <button
         onClick={calcular}
-        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        className={`p-2 rounded ${ darkMode ? "bg-gray-600 text-white hover:bg-gray-500" :  "bg-gray-300 text-black hover:bg-gray-400"}`}
       >
         Calcular Transformada
       </button>
