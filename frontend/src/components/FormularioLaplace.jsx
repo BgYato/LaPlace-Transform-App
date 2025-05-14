@@ -56,14 +56,18 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado,
   
       const data = await res.json();
       const final = generarFormula(parametros);
+      console.log(data);
+      
       setFormulaResultado(final);
       setResultado(data.resultado);
       
       const nuevoItem = {
         formula: final,
         resultado: data.resultado,
+        pasos: data.pasos,
         fecha: new Date().toISOString(),
       };
+
   
       setHistorial((prev) => {
         const actualizados = [nuevoItem, ...prev];

@@ -16,7 +16,11 @@ const HistorialLaplace = ({ historial, setHistorial }) => {
     <div className="w-full max-w-md ml-auto space-y-4">
       <h2 className="text-xl font-bold">📜 Historial</h2>
 
-      {historial.length === 0 && <p className={`text-sm ${darkMode ? "text-gray-400" : "text-black"}`}>Sin transformadas aún.</p>}
+      {historial.length === 0 && (
+        <p className={`text-sm ${darkMode ? "text-gray-400" : "text-black"}`}>
+          Sin transformadas aún.
+        </p>
+      )}
 
       {historial.map((item, index) => (
         <div
@@ -41,11 +45,22 @@ const HistorialLaplace = ({ historial, setHistorial }) => {
 
           <div
             className={`mt-2 pl-2 border-l-2 border-blue-400 overflow-hidden transition-all duration-300 ${
-              expandido === index ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+              expandido === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
             }`}
           >
-            <p className="text-sm font-semibold">Resultado:</p>
+            <p className="text-sm font-semibold mt-2">Resultado:</p>
             <MathJax>{`\\(${item.resultado}\\)`}</MathJax>
+
+            {item.pasos && item.pasos.length > 0 && (
+              <div className="mt-3 text-sm space-y-1">
+                <p className="font-semibold">Pasos:</p>
+                <ul className="list-disc list-inside">
+                  {item.pasos.map((paso, index) => (
+                    <MathJax key={index} dynamic inline={false}>{`\\[${paso}\\]`}</MathJax>
+                  ))} 
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       ))}

@@ -42,7 +42,10 @@ function App() {
         </div>
 
         <div className="max-w-screen-xl mx-auto px-6 py-6 space-y-6">
-          <h1 className="text-3xl font-bold">Transformadas de Laplace 🧠</h1>
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            Transformadas de Laplace
+            <img src={`${ darkMode ? "/icon_white.png" : "/icon_dark.png" }`} alt="" className="h-10 w-10" />
+          </h1>
           <div className="flex flex-col lg:flex-row gap-6">
             <div className="flex-1 lg:w-3/6">
               <FormularioLaplace
