@@ -15,16 +15,16 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado,
   const [parametros, setParametros] = useState({ a: "0", n: "1" });
   const { darkMode } = useTheme();
 
-  const generarFormula = (paramSource) => {
+  const generarFormula = (valor_param) => {
     let expr = funcion;
 
     if (funcion.includes("n")) {
-      const nVal = paramSource.n === "1" ? "" : `^{${paramSource.n}}`;
+      const nVal = valor_param.n === "1" ? "" : `^{${valor_param.n}}`;
       expr = expr.replace("t**n", `t${nVal}`);
     }
 
     if (funcion.includes("a")) {
-      expr = expr.replace(/a/g, paramSource.a || "a");
+      expr = expr.replace(/a/g, valor_param.a || "a");
     }
 
     expr = expr.replace("**", "^");
@@ -56,7 +56,6 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado,
   
       const data = await res.json();
       const final = generarFormula(parametros);
-      console.log(data);
       
       setFormulaResultado(final);
       setResultado(data.resultado);
@@ -65,7 +64,6 @@ const FormularioLaplace = ({ setFormulaVista, setFormulaResultado, setResultado,
         formula: final,
         resultado: data.resultado,
         pasos: data.pasos,
-        fecha: new Date().toISOString(),
       };
 
   

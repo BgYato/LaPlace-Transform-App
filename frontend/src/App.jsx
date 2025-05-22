@@ -3,7 +3,7 @@ import FormularioLaplace from "./components/FormularioLaplace";
 import ResultadoLaplace from "./components/ResultadoLaplace";
 import HistorialLaplace from "./components/HistorialLaplace";
 import { useState } from "react";
-import { useTheme } from "./context/ThemeContext"; // 👈
+import { useTheme } from "./context/ThemeContext";
 
 const mathjaxConfig = {
   loader: { load: ["input/tex", "output/chtml"] },

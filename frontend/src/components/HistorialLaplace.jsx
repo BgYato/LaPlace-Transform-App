@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { MathJax } from "better-react-mathjax";
 import { useTheme } from "../context/ThemeContext";
+import CasosDeUsoModal from "./CasosDeUsoModal";
 
 const HistorialLaplace = ({ historial, setHistorial }) => {
   const [expandido, setExpandido] = useState(null);
+  const [modalFormula, setModalFormula] = useState(null);
   const { darkMode } = useTheme();
 
   const eliminar = (index) => {
@@ -34,13 +36,24 @@ const HistorialLaplace = ({ historial, setHistorial }) => {
             >
               <MathJax>{`\\(${item.formula}\\)`}</MathJax>
             </button>
-            <button
-              className="ml-4 text-red-500 hover:text-red-700"
-              onClick={() => eliminar(index)}
-              title="Eliminar"
-            >
-              🗑️
-            </button>
+            <div className="flex items-center space-x-2 ml-4">
+              {expandido === index && (
+                <button
+                  className="text-blue-500 hover:text-blue-700"
+                  onClick={() => setModalFormula(item.formula)}
+                  title="Ver caso de uso"
+                >
+                  🔍
+                </button>
+              )}
+              <button
+                className="text-red-500 hover:text-red-700"
+                onClick={() => eliminar(index)}
+                title="Eliminar"
+              >
+                🗑️
+              </button>
+            </div>
           </div>
 
           <div
@@ -57,13 +70,20 @@ const HistorialLaplace = ({ historial, setHistorial }) => {
                 <ul className="list-disc list-inside">
                   {item.pasos.map((paso, index) => (
                     <MathJax key={index} dynamic inline={false}>{`\\[${paso}\\]`}</MathJax>
-                  ))} 
+                  ))}
                 </ul>
               </div>
             )}
           </div>
         </div>
       ))}
+
+      {modalFormula && (
+        <CasosDeUsoModal
+          formula={modalFormula}
+          onClose={() => setModalFormula(null)}
+        />
+      )}
     </div>
   );
 };
